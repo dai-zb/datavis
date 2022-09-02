@@ -1,0 +1,24 @@
+Name                                        Stmts   Miss  Cover
+---------------------------------------------------------------
+src\datavis\__init__.py                         3      0   100%
+src\datavis\backend\__init__.py                 2      0   100%
+src\datavis\backend\_backend.py                66     19    71%
+src\datavis\backend\matplotlib_backend.py     206      7    97%
+src\datavis\calc\__init__.py                    2      0   100%
+src\datavis\calc\linear_regression.py          15      1    93%
+src\datavis\calc\norm.py                       17      1    94%
+src\datavis\config\__init__.py                  1      0   100%
+src\datavis\config\config.py                   93      3    97%
+src\datavis\datavis.py                         70      2    97%
+src\datavis\load_cfg.py                        55      1    98%
+src\datavis\style\__init__.py                   8      0   100%
+src\datavis\style\base.py                      11      1    91%
+src\datavis\style\color.py                     61     16    74%
+src\datavis\style\colormap.py                  11      0   100%
+src\datavis\style\hist_type.py                  6      0   100%
+src\datavis\style\info.py                       8      0   100%
+src\datavis\style\legend.py                    10      0   100%
+src\datavis\style\linestle.py                   7      0   100%
+src\datavis\style\marker.py                    24      0   100%
+---------------------------------------------------------------
+TOTAL                                         676     51    92%

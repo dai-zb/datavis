@@ -1,0 +1,6 @@
+[run]
+# 这些文件会被忽略掉
+omit =
+    */tests/*.py
+    */build/*.py
+    */dist-packages/*.py
