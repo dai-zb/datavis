@@ -1,0 +1,28 @@
+{
+    "fig_cfg": {
+        "rows_number": 2
+    },
+    "backend": "matplotlib",
+    "plots": [
+        {
+            "method": "hist",
+            "data": ["{{x}}", "{{bins}}"],
+            "plot_cfg": {
+                "hist_type": "step",
+                "face_color": "yellow",
+                "alpha": 0.75
+            }
+        },
+        {
+            "method": "hist",
+            "data": {"x": "{{x}}", "bins": "{{bins}}", "density": true, "cumulative": true},
+            "idx": 1,
+            "plot_cfg": {
+                "hist_type": "bar",
+                "face_color": "red",
+                "alpha": 0.75,
+                "width": 0.8
+            }
+        }
+    ]
+}
