@@ -1,0 +1,90 @@
+{
+    "args": ["img", "img1","box", "box1", "box3"],
+    "fig_cfg": {
+        "rows_number": 2,
+        "columns_number": 2,
+        "w_space": 0,
+        "h_space": 0.1
+    },
+    "ax_cfg": {
+        "visible": false
+    },
+    "backend": "matplotlib",
+    "plots": [
+        {
+            "method": "im_show",
+            "data": ["{{img}}"]
+        },
+        {
+            "method": "add_box",
+            "data": ["{{box}}"],
+            "label": "ABC"
+        },
+        {
+            "method": "im_show",
+            "data": ["{{img1}}"],
+            "idx": 1,
+            "plot_cfg": {
+                "colormap": "gray",
+                "color_bar": true
+            }
+        },
+        {
+            "method": "add_box",
+            "data": ["{{box1}}"],
+            "idx": 1,
+            "label": "ABC",
+            "plot_cfg": {
+                "face_color": "blue",
+                "color": "white",
+                "line_width": 2,
+                "font_size": 12
+            }
+        },
+        {
+            "method": "im_show",
+            "data": ["{{img1}}"],
+            "idx": 2,
+            "plot_cfg": {
+                "colormap": "hot",
+                "color_bar": true
+            }
+        },
+        {
+            "method": "add_box",
+            "data": ["{{box1}}"],
+            "idx": 2,
+            "plot_cfg": {
+                "face_color": "blue",
+                "color": "white",
+                "line_width": 2
+            }
+        },
+        {
+            "idx": 2,
+            "ax_cfg": {
+                "visible": true
+            }
+        },
+        {
+            "method": "im_show",
+            "data": ["{{img1}}"],
+            "idx": 3,
+            "plot_cfg": {
+                "colormap": "gray_r",
+                "color_bar": true
+            }
+        },
+        {
+            "method": "add_box",
+            "data": ["{{box3}}"],
+            "idx": 3,
+            "label": "xyz",
+            "plot_cfg": {
+                "face_color": "red",
+                "color": "white",
+                "line_width": 2
+            }
+        }
+    ]
+}
