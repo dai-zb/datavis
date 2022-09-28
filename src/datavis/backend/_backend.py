@@ -105,3 +105,7 @@ class Backend:
     @abstractmethod
     def save(self, path: str):
         raise NotImplementedError()
+
+    @abstractmethod
+    def close(self):
+        raise NotImplementedError()

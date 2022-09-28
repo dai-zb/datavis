@@ -192,14 +192,29 @@ class MatplotlibPlotBackend(Backend):
         else:
             color_bar = False
 
+        if "colors_legend" in _cfg:
+            colors_legend = _cfg.pop("colors_legend")
+        else:
+            colors_legend = False
+
         if c is not None and "color" in _cfg:
             # 保证c比color更为优先
             _cfg.pop("color")
+
+        if s is None and "markersize" in _cfg:
+            s = _cfg.pop("markersize")
+        elif "markersize" in _cfg:
+            # scatter 不支持markersize参数，但是s已经设置了
+            _cfg.pop("markersize")
 
         mappable = ax.scatter(x, y, s, c, label=label, **_cfg)
 
         if color_bar:
             self.fig.colorbar(mappable, ax=ax)
+
+        if colors_legend:
+            # 可以被之后的legend设置覆盖
+            ax.legend(*mappable.legend_elements())
 
     def hist(self, x, bins, density=False, cumulative=False,
              idx: int = 0, label: Optional[str] = None,
@@ -336,3 +351,8 @@ class MatplotlibPlotBackend(Backend):
 
     def save(self, path: str):
         self.fig.savefig(path)
+
+    def close(self):
+        plt.cla()  # clean axis
+        plt.clf()  # clean figure
+        plt.close()  # close windows
