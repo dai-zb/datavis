@@ -129,3 +129,6 @@ class Plot(Backend):
 
     def show(self):
         return self.backend.show()
+
+    def close(self):
+        return self.backend.close()
