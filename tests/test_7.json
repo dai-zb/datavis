@@ -1,5 +1,4 @@
 {
-    "args": ["img", "img1","box", "box1", "box3"],
     "fig_cfg": {
         "rows_number": 2,
         "columns_number": 2,

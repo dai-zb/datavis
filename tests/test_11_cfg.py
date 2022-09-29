@@ -7,7 +7,6 @@ np.random.seed(19680801)
 mat = np.random.random([7, 7])
 
 cfg = {
-    "args": ["mat"],
     "fig_cfg": {
         "columns_number": 2,
         "figure_size": (8, 4),
@@ -43,7 +42,7 @@ file_name = "pic/test_11_matshow=.png"
 
 class MyTestCase(TestCase):
     def test_1(self):
-        plot, _ = from_cfg(cfg, mat)
+        plot, _ = from_cfg(cfg, mat=mat)
         plot.save(file_name)
 
     # def test_2(self):

@@ -7,7 +7,6 @@ np.random.seed(19680801)
 mat = np.random.random([7, 7])
 
 cfg = {
-    "args": ["x", "y", "x1", "c"],
     "fig_cfg": {
         "columns_number": 2,
         "figure_size": (8, 4),
@@ -43,7 +42,7 @@ data = np.random.normal(size=1000) ** 2 + \
 
 class MyTestCase(TestCase):
     def test_1(self):
-        plot, rets = from_cfg(cfg, x, y, data, c="green")
+        plot, rets = from_cfg(cfg, x=x, y=y, x1=data, c="green")
         print(rets)
         # [(0.647456422533105, -1.2874205132042107), (18365.11580916711, 100012.67456060456)]
         # plot.backend.fig.tight_layout()

@@ -27,7 +27,7 @@ def func():
 
     plot.plot(x, data, label=list(data_dict.keys()))  # 输入的尺寸是不同的
     # plot.stackplot(x, data_dict.values(), label=list(data_dict.keys()), idx=1)
-    plot.stackplot(x, _data, label=list(data_dict.keys()), idx=1)
+    plot.stack_plot(x, _data, label=list(data_dict.keys()), idx=1)
 
     plot.legend_set(0, LegendCfg())
     plot.legend_set(1, LegendCfg())

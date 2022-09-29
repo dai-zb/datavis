@@ -10,7 +10,6 @@ x = np.arange(-2, 5, 0.05)
 y = 0.5 * x ** 2 + np.random.random(len(x)) * (x - 1.5) * 4
 
 cfg = {
-    "args": ["x", "y", "c"],
     "fig_cfg": {
         "columns_number": 2,
         "figure_size": (8, 4),
@@ -39,12 +38,14 @@ cfg = {
 }
 
 file_name = "pic/test_13_reg_plot=.png"
+
+
 # file_name = "test_13_reg_plot=.png"
 
 
 class MyTestCase(TestCase):
     def test_1(self):
-        plot, rets = from_cfg(cfg, x, y, "green")
+        plot, rets = from_cfg(cfg, x=x, y=y, c="green")
         print(rets)
         # [[-2.4505598281617753, 3.643928664796404], [-3.1169877628133635, 2.4183293994354567, 0.3428164423853748, 0.015443266094270502]]
         plot.save(file_name)

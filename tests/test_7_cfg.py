@@ -29,7 +29,7 @@ file_name = "pic/test_7_图片显示_colorbar_b-box=.png"
 class MyTestCase(TestCase):
     def test_1(self):
         # plot = from_cfg(cfg, img=img, box=box, img1=img1, box1=box1, box3=box3)
-        plot, _ = from_cfg(cfg, img, img1, box, box1=box1, box3=box3)
+        plot, _ = from_cfg(cfg, img=img, img1=img1, box=box, box1=box1, box3=box3)
         plot.save(file_name)
 
     # def test_2(self):
