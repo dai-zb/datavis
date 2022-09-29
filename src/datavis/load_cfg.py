@@ -31,14 +31,7 @@ def replace_value(d, old_value, new_value):
             d[k] = new_value
 
 
-def from_cfg(cfg, *args, **kwargs) -> Tuple[Plot, list]:
-    _kwargs_ = {}
-    arg_names = cfg.get("args")
-    if arg_names:
-        _kwargs_ = {k: v for k, v in zip(arg_names, args)}
-    _kwargs_.update(kwargs)  # 使用kwargs覆盖
-    kwargs = _kwargs_
-
+def from_cfg(cfg, **kwargs) -> Tuple[Plot, list]:
     for k, v in kwargs.items():
         replace_value(cfg, k, v)
 
@@ -81,4 +74,5 @@ def from_cfg(cfg, *args, **kwargs) -> Tuple[Plot, list]:
                 legend_cfg = obj_from_cfg(LegendCfg, item.get("legend_cfg"))
                 plot.legend_set(idx=idx, cfg=legend_cfg)
 
+    # rets 就是调用method的返回，在进行拟合时候，会将拟合的参数返回
     return plot, rets
