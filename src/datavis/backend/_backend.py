@@ -15,42 +15,34 @@ class Backend:
                  cfg: Optional[PlotCfg] = None):
         self.plot(x, y, idx, label, cfg)
 
-    @abstractmethod
     def plot(self, x, y, idx: int = 0, label: Optional[Union[str, List[str]]] = None,
              cfg: Optional[PlotCfg] = None):
         raise NotImplementedError()
 
-    @abstractmethod
     def fill_between(self, x, y1, y2=0, where: Optional[List[bool]] = None,
                      idx: int = 0, label: Optional[Union[str, List[str]]] = None, cfg: Optional[PlotCfg] = None):
         raise NotImplementedError()
 
-    @abstractmethod
     def bar(self, x, y, bottom=None, idx: int = 0, label: Optional[Union[str, List[str]]] = None,
             cfg: Optional[PlotCfg] = None):
         raise NotImplementedError()
 
-    @abstractmethod
     def error_bar(self, x, y, x_err=0, y_err=0, idx: int = 0, label: Optional[Union[str, List[str]]] = None,
                   cfg: Optional[PlotCfg] = None):
         raise NotImplementedError()
 
-    @abstractmethod
     def pie(self, x, y, idx: int = 0, label: Optional[Union[str, List[str]]] = None,
             cfg: Optional[PlotCfg] = None):
         raise NotImplementedError()
 
-    @abstractmethod
     def stack_plot(self, x, y, idx: int = 0, label: Optional[Union[str, List[str]]] = None,
                    cfg: Optional[PlotCfg] = None):
         raise NotImplementedError()
 
-    @abstractmethod
     def scatter(self, x, y, s=None, c=None, idx: int = 0, label: Optional[str] = None,
                 cfg: Optional[PlotCfg] = None):
         raise NotImplementedError()
 
-    @abstractmethod
     def hist(self, x, bins, density=False, cumulative=False,
              idx: int = 0, label: Optional[str] = None,
              cfg: Optional[PlotCfg] = None):
@@ -62,26 +54,21 @@ class Backend:
                  cfg: Optional[PlotCfg] = None):
         raise NotImplementedError()
 
-    @abstractmethod
     def violin_plot(self, x, vert=False,
                     idx: int = 0, label: Optional[Union[str, List[str]]] = None,
                     cfg: Optional[PlotCfg] = None):
         raise NotImplementedError()
 
-    @abstractmethod
     def im_show(self, img, idx: int = 0, label: Optional[Union[str, List[str]]] = None, cfg: Optional[PlotCfg] = None):
         raise NotImplementedError()
 
-    @abstractmethod
     def add_box(self, box, idx: int = 0, label: Optional[Union[str, List[str]]] = None, cfg: Optional[PlotCfg] = None):
         raise NotImplementedError()
 
-    @abstractmethod
     def mask(self, x: List[Tuple[float, float]], idx: int = 0, label: Optional[Union[str, List[str]]] = None,
              cfg: Optional[PlotCfg] = None):
         raise NotImplementedError()
 
-    @abstractmethod
     def mat_show(self, mat, idx: int = 0, label: Optional[Union[str, List[str]]] = None,
                  cfg: Optional[PlotCfg] = None):
         raise NotImplementedError()
