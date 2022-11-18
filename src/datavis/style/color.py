@@ -57,6 +57,8 @@ class ColorInfo(Info):
 
 
 class Colors(BaseEnum):
+    gray = ColorInfo("Gray", ("灰色", "灰"), (128, 128, 128))
+
     black = ColorInfo("Black", ("纯黑", "黑"), (0, 0, 0))
     # -------------------
     red = ColorInfo("Red", ("纯红", "红"), (255, 0, 0))
