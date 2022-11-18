@@ -1,8 +1,10 @@
 import inspect
-from typing import Union, Tuple
+from typing import Tuple
 
 from .config import FigCfg, AxCfg, PlotCfg, LegendCfg
 from .datavis import Plot
+
+import copy
 
 
 def obj_from_cfg(cls, cfg=None):
@@ -18,12 +20,13 @@ def obj_from_cfg(cls, cfg=None):
 
 
 def replace_value(d, old_value, new_value):
-    assert isinstance(d, dict) or isinstance(d, list), type(d)
+    assert isinstance(d, dict) or isinstance(d, (list, tuple)), type(d)
     assert isinstance(old_value, str), type(old_value)
     if isinstance(d, dict):
         items = d.items()
     else:  # list
         items = enumerate(d)
+
     for k, v in items:
         if isinstance(v, dict) or isinstance(v, list):
             replace_value(v, old_value, new_value)
@@ -31,7 +34,18 @@ def replace_value(d, old_value, new_value):
             d[k] = new_value
 
 
+"""
+bugfix 创建多次，只有第一次绘图有效 close也没有用，但是使用多进程进行规避这个bug
+后来发现时配置对象cfg的 拷贝引起的bug
+   第一次修改cfg时候，已经替换了可以修改的值
+   之后的修改，就找不到这些可以值了，所以修改就无效
+"""
+
+
 def from_cfg(cfg, **kwargs) -> Tuple[Plot, list]:
+    # #深拷贝 防止对cfg的对象进行修改，导致只有第一次配置有限
+    cfg = copy.deepcopy(cfg)
+
     for k, v in kwargs.items():
         replace_value(cfg, k, v)
 
