@@ -72,6 +72,9 @@ class Backend:
     def mat_show(self, mat, idx: int = 0, label: Optional[Union[str, List[str]]] = None,
                  cfg: Optional[PlotCfg] = None):
         raise NotImplementedError()
+		
+	def geojson(self, path, idx: int = 0, label: Optional[Union[str, List[str]]] = None, cfg: Optional[PlotCfg] = None):
+        raise NotImplementedError()
 
     @abstractmethod
     def get_ax(self, idx: int = 0, twin_x: bool = False, twin_y: bool = False):
