@@ -1,8 +1,10 @@
 .PHONY: build install uninstall lint clean
 
-project_name = datavis
 python = python
 pip = pip
+
+# 获取当前目录名称
+project_name = $(notdir $(abspath ./))
 
 build: clean lint
 	# sdist  将源码进行打包
