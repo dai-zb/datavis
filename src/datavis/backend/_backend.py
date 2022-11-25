@@ -1,8 +1,11 @@
 from ..config import FigCfg, AxCfg, PlotCfg, LegendCfg
 
-from typing import Optional, List, Union, Tuple
+from typing import Optional, List, Union, Tuple, Sequence
 from abc import abstractmethod
 
+
+# idx   必须存在
+# label 有一些方法中，这个参数没有使用到，但是必须存在，因为格式需要
 
 class Backend:
     @abstractmethod
@@ -48,7 +51,6 @@ class Backend:
              cfg: Optional[PlotCfg] = None):
         raise NotImplementedError()
 
-    @abstractmethod
     def box_plot(self, x, vert=False,
                  idx: int = 0, label: Optional[Union[str, List[str]]] = None,
                  cfg: Optional[PlotCfg] = None):

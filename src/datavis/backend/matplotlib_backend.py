@@ -53,6 +53,11 @@ _arg_name_map = {
     "font_size": "fontsize"
 }
 
+# 图片上显示中文
+if sys.platform == "win32":
+    plt.rcParams['font.sans-serif'] = ["SimHei"]  # 黑体
+    plt.rcParams['axes.unicode_minus'] = False  # 用来坐标轴正常显示负号
+
 
 def _arg_rename_all(d: dict):
     _d = {}
@@ -172,6 +177,7 @@ class MatplotlibPlotBackend(Backend):
 
     def pie(self, x, y, idx: int = 0, label: Optional[Union[str, List[str]]] = None,
             cfg: Optional[PlotCfg] = None):
+        # label 没有使用到
         ax, _cfg = self._pre_handle(idx, cfg)
         if "color" in _cfg and isinstance(_cfg["color"], list):
             _cfg["colors"] = _cfg.pop("color")
@@ -246,6 +252,7 @@ class MatplotlibPlotBackend(Backend):
     def violin_plot(self, x, vert=False,
                     idx: int = 0, label: Optional[Union[str, List[str]]] = None,
                     cfg: Optional[PlotCfg] = None):
+        # label 没有使用到
         ax, _cfg = self._pre_handle(idx, cfg)
         width = _cfg.get("width")
         if width is not None:
@@ -265,6 +272,7 @@ class MatplotlibPlotBackend(Backend):
                 pc.set_alpha(_cfg.get("alpha"))
 
     def im_show(self, img, idx: int = 0, label: Optional[Union[str, List[str]]] = None, cfg: Optional[PlotCfg] = None):
+        # label 没有使用到
         ax, _cfg = self._pre_handle(idx, cfg)
         cmap = _cfg.get("cmap")
         alpha = _cfg.get("alpha")
@@ -326,6 +334,7 @@ class MatplotlibPlotBackend(Backend):
 
     def mat_show(self, mat, idx: int = 0, label: Optional[Union[str, List[str]]] = None,
                  cfg: Optional[PlotCfg] = None):
+        # label 没有使用到
         ax, _cfg = self._pre_handle(idx, cfg)
         cmap = _cfg.get("cmap")
         mappable = ax.matshow(mat, interpolation=None, aspect='auto', cmap=cmap)
@@ -340,6 +349,23 @@ class MatplotlibPlotBackend(Backend):
             if "color_bar" in _cfg and _cfg["color_bar"]:
                 self.fig.colorbar(mappable, ax=ax)
 
+    def geojson(self, path, idx: int = 0, label: Optional[Union[str, List[str]]] = None, cfg: Optional[PlotCfg] = None):
+        # label 没有使用到
+        with open(path, encoding="utf-8") as f:
+            g_json = json.load(f)
+
+        ax, _cfg = self._pre_handle(idx, cfg)
+        color = _cfg.get("color")
+        facecolor = _cfg.get("facecolor")
+        alpha = _cfg.get("alpha")
+        linewidth = _cfg.get("linewidth")
+
+        for item in g_json["features"]:
+            xs = item["geometry"]["coordinates"]
+            for x in _flat(xs):
+                xx, yy = [item for item in zip(*x)]
+                ax.plot(xx, yy, color=color, alpha=alpha, linewidth=linewidth)
+                ax.fill(xx, yy, color=facecolor, alpha=alpha)
     def legend_set(self, idx: int = 0, cfg: Optional[LegendCfg] = None):
         if cfg is not None:
             ax, _cfg = self._pre_handle(idx, cfg)
