@@ -1,0 +1,16 @@
+# mypy 进行 lint 检查
+.mypy_cache
+
+# 代码覆盖率
+# .coverage
+coverage_result
+
+__pycache__
+
+# pycharm
+.idea
+
+venv
+
+test$_*
+**/test_time.log
