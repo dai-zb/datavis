@@ -98,12 +98,12 @@ class AxCfg(BaseCfg):
 
                  # x轴的显示
                  x_ticks: Optional[List[float]] = None,  # 显示的刻度
-                 x_tick_labels: Optional[List[str]] = None,  # 对显示刻度别名（必须在上一个生效后有效）
-                 x_tick_rotation: Optional[float] = None,  # 对显示内容倾斜
+                 x_tick_labels: Optional[List[str]] = None,  # 对显示刻度别名（必须在x_ticks生效后有效）
+                 x_tick_rotation: Optional[float] = None,  # 对显示内容倾斜（必须在x_tick_labels生效后有效）
                  # y轴的显示
                  y_ticks: Optional[List[float]] = None,  # 显示的刻度
-                 y_tick_labels: Optional[List[str]] = None,  # 对显示刻度别名（必须在上一个生效后有效）
-                 y_tick_rotation: Optional[float] = None,  # 对显示内容倾斜
+                 y_tick_labels: Optional[List[str]] = None,  # 对显示刻度别名（必须在y_ticks生效后有效）
+                 y_tick_rotation: Optional[float] = None,  # 对显示内容倾斜（必须在y_tick_labels生效后有效）
                  tick_font_size: Optional[int] = None,
                  # x_tick_labels的字体大小 y_tick_labels的字体大小
 
@@ -171,11 +171,16 @@ class PlotCfg(BaseCfg):
                  # 为list的时候，适用于pie,bar，可以一次给多个块进行颜色设置
                  # violin_plot边线(外围轮廓线)的颜色
                  # scatter的颜色，但是 函数入参 c 更为优先
+                 # mask 中字的颜色
+                 # geojson  地图中的边线的颜色
 
                  face_color: Optional[Union[str, ColorInfo, Enum]] = None,
                  # boxplot、bar的填充颜色，add_box的边框颜色
                  # fill_between 填充色块的透明度
                  # error_bar中线的颜色，即ecolor
+                 # radar 中填充的颜色
+                 # mask 中填充的颜色
+                 # geojson  地图中的面的颜色
 
                  alpha: Optional[float] = None,
                  # im_show图片的透明度
@@ -183,16 +188,21 @@ class PlotCfg(BaseCfg):
                  # mask时填充色块的透明度
                  # fill_between 填充色块的透明度
                  # violin_plot 填充的透明度
+                 # plot 中点的透明度
+                 # radar 中填充的透明度
 
                  colormap: Optional[Union[str, Info, Enum]] = None,
                  # scatter，imshow, matshow 数值映射为颜色
                  color_bar: Optional[bool] = None,  # 散点图，单色图片
                  # scatter，imshow, matshow 是否显示颜色条，在配置了colormap时候才生效
+                 colors_legend: Optional[bool] = None,
+                 # scatter  是否根据点的颜色设置图例
 
                  marker: Optional[Union[str, Info, Enum]] = None,
                  # plot 点的样式
                  # scatter 点的样式
                  marker_size: Optional[int] = None,
+                 # scatter 点的大小 （在没有配置s时候生效）
 
                  line_style: Optional[Union[str, Info, Enum]] = None,
                  # plot 线的样式
@@ -211,6 +221,10 @@ class PlotCfg(BaseCfg):
                  twin_x: Optional[bool] = None,  # 双轴 共用x轴
                  twin_y: Optional[bool] = None,  # 双轴 共用y轴
 
+                 theta_direction=-1,  # radar图 设置旋转方向 1 默认 逆时针方向 -1 顺时针方向
+                 theta_zero_location="N",  # radar图 设置0刻度的起始位置
+                 label_position=45,  # radar图 设置刻度的角度
+
                  font_size: Optional[float] = None,
                  # add_box的文字的大小、mask时文字的大小
                  # matshow的字体大小，且只有配置了 和 fmt 之后，才会开启matshow文字显示功能
@@ -227,6 +241,7 @@ class PlotCfg(BaseCfg):
         self.alpha = alpha
         self.set_value("colormap", colormap, ColorMaps)
         self.color_bar = color_bar
+        self.colors_legend = colors_legend
 
         self.set_value("marker", marker, Markers)
 
@@ -242,6 +257,10 @@ class PlotCfg(BaseCfg):
 
         self.twin_x = twin_x
         self.twin_y = twin_y
+
+        self.theta_direction = theta_direction
+        self.theta_zero_location = theta_zero_location
+        self.label_position = label_position
 
         self.font_size = font_size
 
