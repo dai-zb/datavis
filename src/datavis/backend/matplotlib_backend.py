@@ -1,12 +1,15 @@
 from ._backend import Backend
 from ..config import FigCfg, AxCfg, LegendCfg, PlotCfg
+from ..style import Markers
 
 from matplotlib import pyplot as plt
 from numpy import ndarray
+import numpy as np
+from datetime import date, timedelta
 
-from typing import Optional, List, Union, Tuple
-
-from ..style import Markers
+from typing import Optional, List, Union, Tuple, Sequence
+import sys
+import json
 
 _fig_method_map = {
     # 参数名称: cfg中对应的key
@@ -74,12 +77,21 @@ def _arg_rename(d: dict, old_key: str, new_key: str):
     return d
 
 
+_name_args_pop = {
+    "_all": {"theta_direction", "theta_zero_location", "label_position"},
+    None: set(),
+    "radar": {"theta_direction", "theta_zero_location", "label_position"},
+}
+
+
 class MatplotlibPlotBackend(Backend):
     def __init__(self, fig_cfg: Optional[FigCfg] = None, ax_cfg: Optional[AxCfg] = None):
         super().__init__(fig_cfg, ax_cfg)
         if fig_cfg is not None:
             _fig_cfg = fig_cfg.matplotlib
             args = {k: _fig_cfg[v] for k, v in _fig_method_map.items() if v in _fig_cfg}
+            self.rows_number = args.get("nrows") if args.get("nrows") else 1
+            self.columns_number = args.get("ncols") if args.get("ncols") else 1
             fig, axs = plt.subplots(**args)
 
             kwargs = {x: _fig_cfg[x] for x in ["h_space", "w_space"]
@@ -93,17 +105,18 @@ class MatplotlibPlotBackend(Backend):
         if isinstance(axs, ndarray):
             self.axs = axs.flatten()
         else:
-            self.axs = (axs,)
+            self.axs = [axs]
 
         self.axs_twin_x: dict = {}  # 双轴 共用x轴
         self.axs_twin_y: dict = {}  # 双轴 共用x轴
+        self.axs_polar: dict = {}  # 极坐标
 
         self.fig = fig
 
         for idx in range(len(self.axs)):
             self.ax_set(idx, ax_cfg)
 
-    def get_ax(self, idx: int = 0, twin_x: bool = False, twin_y: bool = False):
+    def get_ax(self, idx: int = 0, twin_x: bool = False, twin_y: bool = False, polar: bool = False):
         ax = self.axs[idx]
 
         if twin_x:
@@ -115,16 +128,26 @@ class MatplotlibPlotBackend(Backend):
             if idx not in self.axs_twin_y:
                 self.axs_twin_y[idx] = ax.twiny()
             return self.axs_twin_y[idx]
+
+        if polar:
+            if idx not in self.axs_polar:
+                _ax = plt.subplot(self.rows_number, self.columns_number, idx + 1, projection="polar")
+                self.axs_polar[idx] = _ax
+                # 提换原来的轴
+                self.axs[idx] = _ax
+            return self.axs_polar[idx]
         return ax
 
     def _get_ax(self, idx: int = 0, cfg: dict = None):
         cfg = {} if cfg is None else cfg
-        twin_x, twin_y = False, False
+        twin_x, twin_y, polar = False, False, False
         if "twin_x" in cfg:
             twin_x = cfg.pop("twin_x")
         if "twin_y" in cfg:
             twin_y = cfg.pop("twin_y")
-        return self.get_ax(idx, twin_x, twin_y), cfg
+        if "polar" in cfg:
+            polar = cfg.pop("polar")
+        return self.get_ax(idx, twin_x, twin_y, polar), cfg
 
     def ax_set(self, idx: int = 0, cfg: Optional[AxCfg] = None):
         _cfg = cfg.matplotlib if cfg is not None else {}
@@ -146,10 +169,16 @@ class MatplotlibPlotBackend(Backend):
                 ax.set_yscale("log", base=_cfg["y_log"])
         return ax
 
-    def _pre_handle(self, idx: int = 0, cfg: Optional[Union[PlotCfg, LegendCfg]] = None):
+    def _pre_handle(self, idx: int = 0, cfg: Optional[Union[PlotCfg, LegendCfg]] = None, name=None):
         _cfg = cfg.matplotlib if cfg is not None else {}
         ax, _cfg = self._get_ax(idx, _cfg)
-        return ax, _arg_rename_all(_cfg)
+        _cfg = _arg_rename_all(_cfg)
+        # 根据name，将_cfg中不通用的参数配置进行保留
+        for item in (_name_args_pop["_all"] - _name_args_pop[name]):  # type: ignore
+            if item in _cfg:
+                _cfg.pop(item)
+
+        return ax, _cfg
 
     def plot(self, x, y, idx: int = 0, label: Optional[Union[str, List[str]]] = None, cfg: Optional[PlotCfg] = None):
         ax, _cfg = self._pre_handle(idx, cfg)
