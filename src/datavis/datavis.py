@@ -1,12 +1,13 @@
-from .backend import MatplotlibPlotBackend
+from .backend import MatplotlibPlotBackend, GeopandasBackend
 from .config import FigCfg, AxCfg, PlotCfg, LegendCfg
 from .backend import Backend
 from .calc import linear_regression, norm_distribution_quantile
 
-from typing import Optional, List, Union, Tuple
+from typing import Optional, List, Union, Tuple, Sequence
 
 _map = {
     "matplotlib": MatplotlibPlotBackend,
+    "geopandas": GeopandasBackend,
 }
 
 
@@ -36,6 +37,19 @@ class Plot(Backend):
         # y = w3*x^3 w2*x^2 + w1*x + w0
         # w3, w2, w1, w0
         return w
+    
+    """
+    def speed_2_soc(s):
+        w = [0.0034903080840019913, 0.0032917914210580735, -8.276159402025737e-05, 3.3147479342491715e-06,
+             -4.11750452428776e-08, 1.9666554175741654e-10]
+
+        ret = 0
+        n = len(w)
+        for i in range(n):
+            ret += w[i] * s ** i
+
+        return ret
+    """
 
     def q_q_plot(self, data, dist=None, s=None, c=None, idx: int = 0, label: Optional[str] = None,
                  cfg: Optional[PlotCfg] = None) -> Tuple[float, float]:
@@ -90,6 +104,10 @@ class Plot(Backend):
              cfg: Optional[PlotCfg] = None):
         return self.backend.hist(x, bins, density, cumulative, idx, label, cfg)
 
+    def radar(self, x, y, idx: int = 0, label: Optional[Union[str, List[str]]] = None,
+              cfg: Optional[PlotCfg] = None):  # 雷达图
+        return self.backend.radar(x, y, idx, label, cfg)
+
     def box_plot(self, x, vert=False,
                  idx: int = 0, label: Optional[Union[str, List[str]]] = None,
                  cfg: Optional[PlotCfg] = None):
@@ -114,6 +132,14 @@ class Plot(Backend):
     def mat_show(self, mat, idx: int = 0, label: Optional[Union[str, List[str]]] = None,
                  cfg: Optional[PlotCfg] = None):
         return self.backend.mat_show(mat, idx, label, cfg)
+
+    def geojson(self, path, idx: int = 0, label: Optional[Union[str, List[str]]] = None, cfg: Optional[PlotCfg] = None):
+        return self.backend.geojson(path, idx, label, cfg)
+
+    def gantt(self, datas: Sequence[Sequence], delta_date: int, idx: int = 0,
+              label: Optional[Union[str, List[str]]] = None, cfg: Optional[PlotCfg] = None):
+        # #甘特图 #gantt
+        return self.backend.gantt(datas, delta_date, idx, label, cfg)
 
     def get_ax(self, idx: int = 0, twin_x: bool = False, twin_y: bool = False):
         return self.backend.get_ax(idx)
