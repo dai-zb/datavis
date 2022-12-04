@@ -259,6 +259,45 @@ class MatplotlibPlotBackend(Backend):
 
         ax.hist(x, bins=bins, density=density, cumulative=cumulative, label=label, **_cfg)
 
+    def radar(self, x, y, idx: int = 0, label: Optional[Union[str, List[str]]] = None,
+              cfg: Optional[PlotCfg] = None):  # 雷达图
+        assert len(x) == len(y), f"{len(x)}== {len(y)}"
+
+        # ax, _cfg = self._pre_handle(idx, cfg, name="radar")
+
+        _cfg = cfg.matplotlib if cfg is not None else {}
+        _cfg["polar"] = True  # 会根据 这个参数，创建极坐标坐标轴
+        ax, _cfg = self._get_ax(idx, _cfg)
+        _cfg = _arg_rename_all(_cfg)
+
+        # 设置旋转方向 1 默认 逆时针方向 -1 顺时针方向
+        ax.set_theta_direction(_cfg.pop("theta_direction"))
+
+        # 设置0刻度的起始位置
+        ax.set_theta_zero_location(_cfg.pop("theta_zero_location"))
+
+        # 设置刻度的角度
+        ax.set_rlabel_position(_cfg.pop("label_position"))
+
+        N = len(x)
+
+        # 设置雷达图的角度，用于平分切开一个圆面
+        angles = np.linspace(0, 2 * np.pi, N, endpoint=False)
+
+        ax.set_xticks(angles, x)
+
+        # 将雷达图中的折线图封闭
+        angles = np.concatenate((angles, [angles[0]]))
+        y = np.concatenate((y, [y[0]]))
+
+        # 填充颜色
+        ax.fill(angles, y, **_cfg)
+
+        # 绘制折线图
+        if "facecolor" in _cfg:
+            _cfg.pop("facecolor")  # plot 不支持facecolor
+        ax.plot(angles, y, 'o-', label=label, **_cfg)
+
     def box_plot(self, x, vert=False,
                  idx: int = 0, label: Optional[Union[str, List[str]]] = None,
                  cfg: Optional[PlotCfg] = None):
