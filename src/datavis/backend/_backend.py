@@ -4,8 +4,8 @@ from typing import Optional, List, Union, Tuple, Sequence
 from abc import abstractmethod
 
 
-# idx   ±ØĞë´æÔÚ
-# label ÓĞÒ»Ğ©·½·¨ÖĞ£¬Õâ¸ö²ÎÊıÃ»ÓĞÊ¹ÓÃµ½£¬µ«ÊÇ±ØĞë´æÔÚ£¬ÒòÎª¸ñÊ½ĞèÒª
+# idx   å¿…é¡»å­˜åœ¨
+# label æœ‰ä¸€äº›æ–¹æ³•ä¸­ï¼Œè¿™ä¸ªå‚æ•°æ²¡æœ‰ä½¿ç”¨åˆ°ï¼Œä½†æ˜¯å¿…é¡»å­˜åœ¨ï¼Œå› ä¸ºæ ¼å¼éœ€è¦
 
 class Backend:
     @abstractmethod
@@ -51,6 +51,10 @@ class Backend:
              cfg: Optional[PlotCfg] = None):
         raise NotImplementedError()
 
+    def radar(self, x, y, idx: int = 0, label: Optional[Union[str, List[str]]] = None,
+              cfg: Optional[PlotCfg] = None):  # é›·è¾¾å›¾
+        raise NotImplementedError()
+
     def box_plot(self, x, vert=False,
                  idx: int = 0, label: Optional[Union[str, List[str]]] = None,
                  cfg: Optional[PlotCfg] = None):
@@ -74,8 +78,13 @@ class Backend:
     def mat_show(self, mat, idx: int = 0, label: Optional[Union[str, List[str]]] = None,
                  cfg: Optional[PlotCfg] = None):
         raise NotImplementedError()
-		
-	def geojson(self, path, idx: int = 0, label: Optional[Union[str, List[str]]] = None, cfg: Optional[PlotCfg] = None):
+
+    def geojson(self, path, idx: int = 0, label: Optional[Union[str, List[str]]] = None, cfg: Optional[PlotCfg] = None):
+        raise NotImplementedError()
+
+    def gantt(self, datas: Sequence[Sequence], delta_date: int, idx: int = 0,
+              label: Optional[Union[str, List[str]]] = None, cfg: Optional[PlotCfg] = None):
+        # #ç”˜ç‰¹å›¾ #gantt
         raise NotImplementedError()
 
     @abstractmethod
