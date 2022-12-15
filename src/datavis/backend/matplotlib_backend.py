@@ -434,6 +434,66 @@ class MatplotlibPlotBackend(Backend):
                 xx, yy = [item for item in zip(*x)]
                 ax.plot(xx, yy, color=color, alpha=alpha, linewidth=linewidth)
                 ax.fill(xx, yy, color=facecolor, alpha=alpha)
+
+    def gantt(self, datas: Sequence[Sequence], delta_date: int, idx: int = 0,
+              label: Optional[Union[str, List[str]]] = None, cfg: Optional[PlotCfg] = None):
+        # label 没有使用到
+        # #甘特图 #gantt
+        ax, _cfg = self._pre_handle(idx, cfg)
+
+        task, clazz, start_date, end_date, completion = list(zip(*datas))
+        start_date = list(map(date.fromisoformat, start_date))
+        end_date = list(map(date.fromisoformat, end_date))
+
+        # project start date
+        proj_start = min(start_date)
+
+        # number of days from project start to task start
+        start_num = list(map(lambda x: (x - proj_start).days, start_date))
+
+        # number of days from project start to end of tasks(天数+1，即包含最后一天)
+        end_num = list(map(lambda x: (x - proj_start).days + 1, end_date))
+
+        # days between start and end of each task
+        days = list(y - x for x, y in zip(start_num, end_num))
+
+        # days between start and current progression of each task
+        current_num = list(x * y for x, y in zip(days, completion))
+
+        class_lst = sorted(set(clazz))
+        color_map = {v: f"C{k % 10}" for k, v in enumerate(class_lst)}
+
+        colors = [color_map[item[1]] for item in datas]
+
+        # bars
+        ax.barh(task, current_num, left=start_num, color=colors)
+        ax.barh(task, days, left=start_num, color=colors, alpha=0.5)
+
+        for _idx, (_task, _start, _end, _comp) in enumerate(zip(task, start_num, end_num, completion)):
+            ax.text(x=_end + 0.1, y=_task, s=f"{int(_comp * 100)}%", va='center', alpha=0.8)
+            ax.text(_start - 0.1, _idx, _task, va='center', ha='right', alpha=0.8)
+
+        # grid lines
+        ax.set_axisbelow(True)
+        ax.xaxis.grid(color='k', linestyle='dashed', alpha=0.4, which='both')
+
+        # ticks
+        xticks = list(range(0, max(end_num) + 1, delta_date))
+        xticks_labels = [(proj_start + timedelta(days=x)).strftime("%Y-%m-%d") for x in xticks]
+
+        ax.set_xticks(xticks)
+        ax.set_xticklabels(xticks_labels)
+        ax.set_yticks([])
+
+        # y 轴取反
+        ax.invert_yaxis()
+
+        # remove spines
+        ax.spines['right'].set_visible(False)
+        ax.spines['left'].set_visible(False)
+        ax.spines['left'].set_position(('outward', 10))
+        ax.spines['top'].set_visible(False)
+
     def legend_set(self, idx: int = 0, cfg: Optional[LegendCfg] = None):
         if cfg is not None:
             ax, _cfg = self._pre_handle(idx, cfg)
@@ -447,6 +507,24 @@ class MatplotlibPlotBackend(Backend):
         self.fig.savefig(path)
 
     def close(self):
+        self.fig.clf()
+        self.fig.clear()
+        plt.close(self.fig)
+        self.fig = None
+
         plt.cla()  # clean axis
         plt.clf()  # clean figure
         plt.close()  # close windows
+
+
+def _flat(x: list):
+    assert isinstance(x, list)
+    if x and isinstance(x[0], list) and x[0] and not isinstance(x[0][0], list):
+        yield x
+        return
+    elif x and isinstance(x[0], list) and x[0] and isinstance(x[0][0], list):
+        for xx in x:
+            for xxx in _flat(xx):
+                yield xxx
+    else:
+        raise ValueError()

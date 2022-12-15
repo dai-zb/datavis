@@ -54,3 +54,53 @@ class MyTestCase(TestCase):
     #     plot = func()
     #     plot.save(file_name)
     #     plot.show()
+
+    # def test_3(self):
+    #     plot, rets = from_cfg(cfg, x=x, y=y, c="green")
+    #     print(rets)
+    #     plot.save("_1$.png")
+    #     plot.close()
+    #
+    #     plot, rets = from_cfg(cfg, x=x * 1.5, y=-y * 2, c="red")
+    #     print(rets)
+    #     plot.save("_2$.png")
+
+    # def test_3a(self):
+    #     from datavis.backend import MatplotlibPlotBackend
+    #
+    #     p = MatplotlibPlotBackend()
+    #     p.plot(x, y)
+    #     p.save("_1$.png")
+    #
+    #     p = MatplotlibPlotBackend()
+    #     p.plot(x * 1.5, -y * 2)
+    #     p.save("_2$.png")
+    #
+    #     # plot, rets = from_cfg(cfg, x=x * 1.5, y=-y * 2, c="red")
+    #     # print(rets)
+    #     # plot.save("_2$.png")
+
+    # def test_4(self):
+    #     from matplotlib import pyplot as plt
+    #
+    #     class Plot:
+    #         def __init__(self):
+    #             self.fig, (self.ax0, self.ax1) = plt.subplots(nrows=2)
+    #
+    #         def __call__(self, x, y):
+    #             self.ax0.scatter(x, y)
+    #             self.ax1.plot(x, y)
+    #
+    #         def savefig(self, f):
+    #             plt.savefig(f)
+    #
+    #         def close(self):
+    #             pass
+    #
+    #     p = Plot()
+    #     p(x, y)
+    #     p.savefig("_1$.png")
+    #
+    #     p = Plot()
+    #     p(x * 1.5, -y * 2)
+    #     p.savefig("_2$.png")
