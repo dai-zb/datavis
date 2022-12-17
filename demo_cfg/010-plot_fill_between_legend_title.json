@@ -1,0 +1,62 @@
+{
+    "fig_cfg": {
+        "columns_number": 2
+    },
+    "ax_cfg": {
+        "title": "fill between"
+    },
+    "backend": "matplotlib",
+    "plots": [
+        {
+            "method": "plot",
+            "data": ["{{x}}", "{{y1}}"],
+            "label": "y1"
+        },
+        {
+            "method": "plot",
+            "data": ["{{x}}", "{{y2}}"],
+            "label": "y2"
+        },
+        {
+            "method": "fill_between",
+            "data": ["{{x}}", "{{y1}}", "{{y2}}"],
+            "plot_cfg": {
+                "color": "green",
+                "alpha": 0.3
+            }
+        },
+        {
+            "legend_cfg": {
+                "location": "upper_right",
+                "columns_number": 1
+            }
+        },
+        {
+            "method": "fill_between",
+            "data": ["{{x}}", "{{y1}}", "{{y2}}", "{{where1}}"],
+            "idx": 1,
+            "label": "a",
+            "plot_cfg": {
+                "color": "green",
+                "alpha": 0.3
+            }
+        },
+        {
+            "method": "fill_between",
+            "data": ["{{x}}", "{{y1}}", "{{y2}}", "{{where2}}"],
+            "idx": 1,
+            "label": "b",
+            "plot_cfg": {
+                "color": "red",
+                "alpha": 0.3
+            }
+        },
+        {
+            "idx": 1,
+            "legend_cfg": {
+                "location": "upper_right",
+                "columns_number": 1
+            }
+        }
+    ]
+}
